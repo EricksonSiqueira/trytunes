@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 import Loading from '../pages/Loading';
 
@@ -50,6 +51,11 @@ class Header extends React.Component {
                 {userName}
               </span>
             </div>
+            <nav>
+              <Link data-testid="link-to-search" to="/search">Pesquisar</Link>
+              <Link data-testid="link-to-favorites" to="/favorites">Favoritos</Link>
+              <Link data-testid="link-to-profile" to="/profile">Pesquisar</Link>
+            </nav>
           </header>
         )}
       </div>
