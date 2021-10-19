@@ -17,7 +17,7 @@ class Header extends React.Component {
 
   componentDidMount() {
     const { userName } = this.state;
-    if (userName === 'user'){
+    if (userName === 'user') {
       this.updateUserName();
     }
   }
