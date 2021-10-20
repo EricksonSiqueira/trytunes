@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
 import Loading from './Loading';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends React.Component {
   constructor() {
@@ -20,10 +21,12 @@ class Album extends React.Component {
     this.setLoading = this.setLoading.bind(this);
     this.addFavoriteId = this.addFavoriteId.bind(this);
     this.verifyIfIsFavorite = this.verifyIfIsFavorite.bind(this);
+    this.fetchFavorites = this.fetchFavorites.bind(this);
   }
 
   componentDidMount() {
     this.fetchMusics();
+    this.fetchFavorites();
   }
 
   setLoading(value) {
@@ -39,6 +42,14 @@ class Album extends React.Component {
     const { artistName, collectionName } = fetchedMusics[0];
 
     this.setState({ musics: fetchedMusics, artistName, collectionName, loading: false });
+  }
+
+  async fetchFavorites() {
+    const favoritesObjList = await getFavoriteSongs();
+    const favoritesIdList = favoritesObjList.map((favoriteSong) => favoriteSong.trackId);
+    this.setState(() => ({
+      favoritesIds: favoritesIdList,
+    }));
   }
 
   addFavoriteId(newId) {
