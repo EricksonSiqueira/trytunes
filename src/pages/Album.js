@@ -29,9 +29,7 @@ class Album extends React.Component {
 
     const fetchedMusics = await getMusics(albumId);
     const { artistName, collectionName } = fetchedMusics[0];
-    const tracks = fetchedMusics.filter((obj) => obj.wrapperType === 'track');
-    console.log(tracks);
-    this.setState({ musics: tracks, artistName, collectionName, loading: false });
+    this.setState({ musics: fetchedMusics, artistName, collectionName, loading: false });
   }
 
   render() {
@@ -46,7 +44,8 @@ class Album extends React.Component {
               <h3 data-testid="artist-name">{artistName}</h3>
             </section>
             <section>
-              {musics.map((music) => <MusicCard { ...music } key={ music.trackId } />)}
+              {musics.slice(1)
+                .map((music) => <MusicCard key={ music.trackId } { ...music } />)}
             </section>
           </section>
         )}
