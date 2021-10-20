@@ -1,9 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { addSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
+  constructor() {
+    super();
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  async handleChange() {
+    const { music, setLoading, index, addFavoriteIndex } = this.props;
+    setLoading(true);
+    addFavoriteIndex(index);
+    await addSong(music);
+    setLoading(false);
+  }
+
   render() {
-    const { trackName, previewUrl } = this.props;
+    const { music, isFavorite } = this.props;
+    const { trackName, previewUrl, trackId } = music;
     return (
       <div>
         <span>
@@ -15,14 +31,28 @@ class MusicCard extends React.Component {
           <code>audio</code>
           .
         </audio>
+        <label htmlFor="favoriteSong">
+          Favorita
+          <input
+            data-testid={ `checkbox-music-${trackId}` }
+            type="checkbox"
+            name="favoriteSong"
+            id="favoriteSong"
+            checked={ isFavorite }
+            onChange={ this.handleChange }
+          />
+        </label>
       </div>
     );
   }
 }
 
 MusicCard.propTypes = {
-  trackName: PropTypes.string.isRequired,
-  previewUrl: PropTypes.string.isRequired,
+  music: PropTypes.objectOf(PropTypes.any).isRequired,
+  setLoading: PropTypes.func.isRequired,
+  addFavoriteIndex: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  isFavorite: PropTypes.bool.isRequired,
 };
 
 export default MusicCard;

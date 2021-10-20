@@ -14,12 +14,20 @@ class Album extends React.Component {
       artistName: '',
       collectionName: '',
       loading: true,
+      favoritesIndexs: [],
     };
     this.fetchMusics = this.fetchMusics.bind(this);
+    this.setLoading = this.setLoading.bind(this);
+    this.addFavoriteIndex = this.addFavoriteIndex.bind(this);
+    this.verifyIfIsFavorite = this.verifyIfIsFavorite.bind(this);
   }
 
   componentDidMount() {
     this.fetchMusics();
+  }
+
+  setLoading(value) {
+    this.setState({ loading: value });
   }
 
   async fetchMusics() {
@@ -29,7 +37,21 @@ class Album extends React.Component {
 
     const fetchedMusics = await getMusics(albumId);
     const { artistName, collectionName } = fetchedMusics[0];
+
     this.setState({ musics: fetchedMusics, artistName, collectionName, loading: false });
+  }
+
+  addFavoriteIndex(index) {
+    this.setState((previousState) => ({
+      favoritesIndexs: [...previousState.favoritesIndexs, index],
+    }));
+  }
+
+  verifyIfIsFavorite(index) {
+    const { favoritesIndexs } = this.state;
+    const isFavorite = favoritesIndexs
+      .some((favoriteIndex) => favoriteIndex === index);
+    return isFavorite;
   }
 
   render() {
@@ -45,7 +67,15 @@ class Album extends React.Component {
             </section>
             <section>
               {musics.slice(1)
-                .map((music) => <MusicCard key={ music.trackId } { ...music } />)}
+                .map((music, index) => (
+                  <MusicCard
+                    key={ music.trackId }
+                    music={ music }
+                    setLoading={ this.setLoading }
+                    index={ index }
+                    addFavoriteIndex={ this.addFavoriteIndex }
+                    isFavorite={ this.verifyIfIsFavorite(index) }
+                  />))}
             </section>
           </section>
         )}
