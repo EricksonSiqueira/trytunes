@@ -14,11 +14,11 @@ class Album extends React.Component {
       artistName: '',
       collectionName: '',
       loading: true,
-      favoritesIndexs: [],
+      favoritesIds: [],
     };
     this.fetchMusics = this.fetchMusics.bind(this);
     this.setLoading = this.setLoading.bind(this);
-    this.addFavoriteIndex = this.addFavoriteIndex.bind(this);
+    this.addFavoriteId = this.addFavoriteId.bind(this);
     this.verifyIfIsFavorite = this.verifyIfIsFavorite.bind(this);
   }
 
@@ -41,16 +41,21 @@ class Album extends React.Component {
     this.setState({ musics: fetchedMusics, artistName, collectionName, loading: false });
   }
 
-  addFavoriteIndex(index) {
-    this.setState((previousState) => ({
-      favoritesIndexs: [...previousState.favoritesIndexs, index],
-    }));
+  addFavoriteId(newId) {
+    const { favoritesIds } = this.state;
+    const isRepeated = favoritesIds.find((id) => id === newId);
+
+    if (!isRepeated) {
+      this.setState((previousState) => ({
+        favoritesIds: [...previousState.favoritesIds, newId],
+      }));
+    }
   }
 
-  verifyIfIsFavorite(index) {
-    const { favoritesIndexs } = this.state;
-    const isFavorite = favoritesIndexs
-      .some((favoriteIndex) => favoriteIndex === index);
+  verifyIfIsFavorite(id) {
+    const { favoritesIds } = this.state;
+    const isFavorite = favoritesIds
+      .some((favoriteIndex) => favoriteIndex === id);
     return isFavorite;
   }
 
@@ -67,14 +72,13 @@ class Album extends React.Component {
             </section>
             <section>
               {musics.slice(1)
-                .map((music, index) => (
+                .map((music) => (
                   <MusicCard
                     key={ music.trackId }
                     music={ music }
                     setLoading={ this.setLoading }
-                    index={ index }
-                    addFavoriteIndex={ this.addFavoriteIndex }
-                    isFavorite={ this.verifyIfIsFavorite(index) }
+                    addFavoriteId={ this.addFavoriteId }
+                    isFavorite={ this.verifyIfIsFavorite(music.trackId) }
                   />))}
             </section>
           </section>

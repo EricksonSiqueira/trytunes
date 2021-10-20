@@ -10,9 +10,10 @@ class MusicCard extends React.Component {
   }
 
   async handleChange() {
-    const { music, setLoading, index, addFavoriteIndex } = this.props;
+    const { music, setLoading, addFavoriteId } = this.props;
+    const { trackId } = music;
     setLoading(true);
-    addFavoriteIndex(index);
+    addFavoriteId(trackId);
     await addSong(music);
     setLoading(false);
   }
@@ -50,8 +51,7 @@ class MusicCard extends React.Component {
 MusicCard.propTypes = {
   music: PropTypes.objectOf(PropTypes.any).isRequired,
   setLoading: PropTypes.func.isRequired,
-  addFavoriteIndex: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
+  addFavoriteId: PropTypes.func.isRequired,
   isFavorite: PropTypes.bool.isRequired,
 };
 
