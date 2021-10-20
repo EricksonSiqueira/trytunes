@@ -14,6 +14,7 @@ class AlbumList extends React.Component {
     return (
       <AlbumPreview
         key={ collectionId }
+        albumId={ collectionId }
         imgUrl={ artworkUrl100 }
         name={ artistName }
         collection={ collectionName }
