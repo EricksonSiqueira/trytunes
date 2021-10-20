@@ -21,6 +21,7 @@ class Search extends React.Component {
     this.handleButton = this.handleButton.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.setLoading = this.setLoading.bind(this);
+    this.display = this.display.bind(this);
   }
 
   handleChange({ target }) {
@@ -59,6 +60,15 @@ class Search extends React.Component {
     this.setState(defaultState);
   }
 
+  display() {
+    const { albums } = this.state;
+    if (albums.length === 0) {
+      return ('');
+    }
+
+    return (<Loading />);
+  }
+
   validateButton() {
     const { artistInput } = this.state;
     const minCharacteres = 2;
@@ -72,42 +82,44 @@ class Search extends React.Component {
   }
 
   render() {
-    const { artistInput, buttonIsDisable, loading, artistName, albums } = this.state;
+    const {
+      artistInput,
+      buttonIsDisable,
+      artistName,
+      albums,
+      loading } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
-        {loading ? <Loading /> : (
-          <section>
-            <form>
-              <div>
-                <label htmlFor="artist-input">
-                  Artista
-                  <input
-                    data-testid="search-artist-input"
-                    type="text"
-                    name="artistInput"
-                    id="artist-input"
-                    placeholder="nome do artista"
-                    value={ artistInput }
-                    onChange={ this.handleChange }
-                  />
-                </label>
-              </div>
-              <button
-                data-testid="search-artist-button"
-                type="submit"
-                disabled={ buttonIsDisable }
-                onClick={ this.handleButton }
-              >
-                Pesquisar
-              </button>
-            </form>
+        <section>
+          <form>
+            <label htmlFor="artist-input">
+              Artista
+              <input
+                data-testid="search-artist-input"
+                type="text"
+                name="artistInput"
+                id="artist-input"
+                placeholder="nome do artista"
+                value={ artistInput }
+                onChange={ this.handleChange }
+              />
+            </label>
+            <button
+              data-testid="search-artist-button"
+              type="submit"
+              disabled={ buttonIsDisable }
+              onClick={ this.handleButton }
+            >
+              Pesquisar
+            </button>
+          </form>
+          {loading || albums.length === 0 ? this.display() : (
             <AlbumList
               albums={ albums }
               artistName={ artistName }
-            />
-          </section>
-        )}
+            />)}
+        </section>
       </div>
     );
   }
