@@ -21,7 +21,6 @@ class Search extends React.Component {
     this.handleButton = this.handleButton.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.setLoading = this.setLoading.bind(this);
-    this.display = this.display.bind(this);
   }
 
   handleChange({ target }) {
@@ -41,7 +40,6 @@ class Search extends React.Component {
     this.resetForm();
 
     const albums = await searchAlbumsAPI(artistName);
-    console.log(albums);
     this.setState({ albums });
     this.setLoading(false);
   }
@@ -53,20 +51,9 @@ class Search extends React.Component {
   resetForm() {
     const defaultState = {
       artistInput: '',
-      buttonIsDisable: true,
-      loading: false,
     };
 
     this.setState(defaultState);
-  }
-
-  display() {
-    const { albums } = this.state;
-    if (albums.length === 0) {
-      return ('');
-    }
-
-    return (<Loading />);
   }
 
   validateButton() {
@@ -91,35 +78,42 @@ class Search extends React.Component {
     return (
       <div data-testid="page-search">
         <Header />
-        <section>
-          <form>
-            <label htmlFor="artist-input">
-              Artista
-              <input
-                data-testid="search-artist-input"
-                type="text"
-                name="artistInput"
-                id="artist-input"
-                placeholder="nome do artista"
-                value={ artistInput }
-                onChange={ this.handleChange }
-              />
-            </label>
-            <button
-              data-testid="search-artist-button"
-              type="submit"
-              disabled={ buttonIsDisable }
-              onClick={ this.handleButton }
-            >
-              Pesquisar
-            </button>
-          </form>
-          {loading || albums.length === 0 ? this.display() : (
-            <AlbumList
-              albums={ albums }
-              artistName={ artistName }
-            />)}
-        </section>
+        {loading ? <Loading /> : (
+          <section>
+            <form>
+              <label htmlFor="artist-input">
+                Artista
+                <input
+                  data-testid="search-artist-input"
+                  type="text"
+                  name="artistInput"
+                  id="artist-input"
+                  placeholder="nome do artista"
+                  value={ artistInput }
+                  onChange={ this.handleChange }
+                />
+              </label>
+              <button
+                data-testid="search-artist-button"
+                type="submit"
+                disabled={ buttonIsDisable }
+                onClick={ this.handleButton }
+              >
+                Pesquisar
+              </button>
+            </form>
+            <section>
+              {albums.length === 0 ? 'Nenhum álbum foi encontrado' : (
+                <>
+                  <h2>{`Resultado de álbuns de: ${artistName}`}</h2>
+                  <AlbumList
+                    albums={ albums }
+                    artistName={ artistName }
+                  />
+                </>)}
+            </section>
+          </section>
+        )}
       </div>
     );
   }

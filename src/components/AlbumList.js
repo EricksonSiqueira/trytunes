@@ -22,13 +22,10 @@ class AlbumList extends React.Component {
   }
 
   render() {
-    const { albums, artistName } = this.props;
+    const { albums } = this.props;
     return (
-      <section>
-        <h2>{`Resultado de albúns de ${artistName}`}</h2>
-        <section className="albums-list">
-          {albums.map(this.creatAlbumComponent)}
-        </section>
+      <section className="albums-list">
+        {albums.map(this.creatAlbumComponent)}
       </section>
     );
   }
@@ -36,7 +33,6 @@ class AlbumList extends React.Component {
 
 AlbumList.propTypes = {
   albums: PropTypes.arrayOf(PropTypes.object).isRequired,
-  artistName: PropTypes.string.isRequired,
 };
 
 export default AlbumList;
