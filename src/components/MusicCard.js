@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
   constructor() {
@@ -9,12 +9,19 @@ class MusicCard extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  async handleChange() {
-    const { music, setLoading, addFavoriteId } = this.props;
+  async handleChange({ target }) {
+    const { music, setLoading, addFavoriteId, removeFavoriteId } = this.props;
     const { trackId } = music;
+    const { checked } = target;
+
     setLoading(true);
-    addFavoriteId(trackId);
-    await addSong(music);
+    if (checked) {
+      addFavoriteId(trackId);
+      await addSong(music);
+    } else {
+      removeFavoriteId(trackId);
+      await removeSong(music);
+    }
     setLoading(false);
   }
 
@@ -52,6 +59,7 @@ MusicCard.propTypes = {
   music: PropTypes.objectOf(PropTypes.any).isRequired,
   setLoading: PropTypes.func.isRequired,
   addFavoriteId: PropTypes.func.isRequired,
+  removeFavoriteId: PropTypes.func.isRequired,
   isFavorite: PropTypes.bool.isRequired,
 };
 

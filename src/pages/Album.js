@@ -22,6 +22,7 @@ class Album extends React.Component {
     this.addFavoriteId = this.addFavoriteId.bind(this);
     this.verifyIfIsFavorite = this.verifyIfIsFavorite.bind(this);
     this.fetchFavorites = this.fetchFavorites.bind(this);
+    this.removeFavoriteId = this.removeFavoriteId.bind(this);
   }
 
   componentDidMount() {
@@ -63,6 +64,12 @@ class Album extends React.Component {
     }
   }
 
+  removeFavoriteId(idToRemove) {
+    const { favoritesIds } = this.state;
+    const filteredFavoritesIds = favoritesIds.filter((id) => id !== idToRemove);
+    this.setState({ favoritesIds: filteredFavoritesIds });
+  }
+
   verifyIfIsFavorite(id) {
     const { favoritesIds } = this.state;
     const isFavorite = favoritesIds
@@ -89,6 +96,7 @@ class Album extends React.Component {
                     music={ music }
                     setLoading={ this.setLoading }
                     addFavoriteId={ this.addFavoriteId }
+                    removeFavoriteId={ this.removeFavoriteId }
                     isFavorite={ this.verifyIfIsFavorite(music.trackId) }
                   />))}
             </section>
