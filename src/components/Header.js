@@ -9,7 +9,7 @@ class Header extends React.Component {
 
     this.state = {
       loading: false,
-      userName: 'user',
+      userName: '',
     };
 
     this.setLoading = this.setLoading.bind(this);
@@ -17,10 +17,7 @@ class Header extends React.Component {
   }
 
   componentDidMount() {
-    const { userName } = this.state;
-    if (userName === 'user') {
-      this.updateUserName();
-    }
+    this.updateUserName();
   }
 
   setLoading(value) {
