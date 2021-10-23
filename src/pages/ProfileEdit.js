@@ -38,6 +38,7 @@ class ProfileEdit extends React.Component {
 
   async handleClick(event) {
     event.preventDefault();
+    this.setState({ loading: true });
     const { name, email, description, image } = this.state;
     const userObj = {
       name,
@@ -46,7 +47,6 @@ class ProfileEdit extends React.Component {
       image,
     };
     await updateUser(userObj);
-
     this.setState({ update: true });
   }
 
@@ -66,7 +66,7 @@ class ProfileEdit extends React.Component {
     const fetchedUser = await getUser();
     const { name, email, image, description } = fetchedUser;
     this.setState({ name, email, image, description }, () => {
-      this.setState({ loading: false });
+      this.setState({ loading: false, buttonIsDisable: !this.toggleButton() });
     });
   }
 
@@ -87,7 +87,7 @@ class ProfileEdit extends React.Component {
       <div data-testid="page-profile-edit">
         <Header />
         {loading ? <Loading /> : (
-          <form action="submit">
+          <form>
             <div>
               <img src={ image } alt="perfil" />
               <label htmlFor="image">
